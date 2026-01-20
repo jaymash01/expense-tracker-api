@@ -31,10 +31,7 @@ class ExpensesController extends Controller
             ->where('user_id', $userId);
 
         if ($q) {
-            $data->where(function ($query) use ($q) {
-                $query->where('name', 'like', '%' . $q . '%')
-                    ->orWhere('description', 'like', '%' . $q . '%');
-            });
+            $data->where('description', 'like', '%' . $q . '%');
         }
 
         if ($categoryId) {
