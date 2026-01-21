@@ -103,7 +103,7 @@ class DashboardController extends Controller
 
     private function askGeminiAI($summary)
     {
-        $result = Gemini::generativeModel('gemini-3-flash')
+        $result = Gemini::generativeModel('gemini-3-flash-preview')
             ->withSystemInstruction(Content::parse('You are a helpful financial advisor. Analyze the user\'s monthly spending and provide 3 concise bullet points for improvement. The currency used is Tanzanian Shilling. Be encouraging.'))
             ->generateContent("Here is my spending data for this month: {$summary}");
 
