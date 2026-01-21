@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Utils\ResponseHandler;
 use Carbon\Carbon;
 use Exception;
+use Gemini\Data\Content;
+use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -57,6 +59,8 @@ class DashboardController extends Controller
 
     private function getSummaryInsights(User $user)
     {
+        $aiModel = env('AI_MODEL', 'open-ai');
+
         try {
             $expenses = $user->expenses()
                 ->with('category')
@@ -69,8 +73,8 @@ class DashboardController extends Controller
             $summary = "Total spent this month: {$totalSpent}. Breakdown: " . $expenses->toJson();
 
             // Cache the insights for 24 hours so we don't re-run the API call every time the API is called
-            return Cache::remember("user_insights_{$user->id}", 86400, function () use ($summary) {
-                return $this->askAI($summary);
+            return Cache::remember("user_insights_{$user->id}", 86400, function () use ($aiModel, $summary) {
+                return $aiModel == 'open-ai' ? $this->askOpenAI($summary) : $this->askGeminiAI($summary);
             });
         } catch (Exception $e) {
             Log::debug($e);
@@ -78,7 +82,7 @@ class DashboardController extends Controller
         }
     }
 
-    private function askAI($summary)
+    private function askOpenAI($summary)
     {
         $result = OpenAI::chat()->create([
             'model' => 'gpt-4o-mini',
@@ -95,5 +99,14 @@ class DashboardController extends Controller
         ]);
 
         return $result->choices[0]->message->content;
+    }
+
+    private function askGeminiAI($summary)
+    {
+        $result = Gemini::geminiFlash()
+            ->withSystemInstruction(Content::parse('You are a helpful financial advisor. Analyze the user\'s monthly spending and provide 3 concise bullet points for improvement. The currency used is Tanzanian Shilling. Be encouraging.'))
+            ->generateContent("Here is my spending data for this month: {$summary}");
+
+        return $result->text();
     }
 }
