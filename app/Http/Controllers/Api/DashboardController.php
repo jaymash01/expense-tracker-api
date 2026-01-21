@@ -69,7 +69,7 @@ class DashboardController extends Controller
             $summary = "Total spent this month: {$totalSpent}. Breakdown: " . $expenses->toJson();
 
             // Cache the insights for 24 hours so we don't re-run the API call every time the API is called
-            Cache::remember("user_insights_{$user->id}", 86400, function () use ($summary) {
+            return Cache::remember("user_insights_{$user->id}", 86400, function () use ($summary) {
                 return $this->askAI($summary);
             });
         } catch (Exception $e) {
