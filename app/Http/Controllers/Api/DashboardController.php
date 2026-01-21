@@ -32,7 +32,7 @@ class DashboardController extends Controller
             ],
             'lists' => [
                 'recent_expenses' => [],
-            ]
+            ],
         ];
 
         $now = Carbon::now();
