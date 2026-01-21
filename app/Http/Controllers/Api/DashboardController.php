@@ -72,8 +72,8 @@ class DashboardController extends Controller
             $totalSpent = $expenses->sum();
             $summary = "Total spent this month: {$totalSpent}. Breakdown: " . $expenses->toJson();
 
-            // Cache the insights for 24 hours so we don't re-run the API call every time the API is called
-            return Cache::remember("user_insights_{$user->id}", 86400, function () use ($aiModel, $summary) {
+            // Cache the insights for 12 hours so we don't re-run the API call every time the API is called
+            return Cache::remember("user_insights_{$user->id}", 43200, function () use ($aiModel, $summary) {
                 return $aiModel == 'open-ai' ? $this->askOpenAI($summary) : $this->askGeminiAI($summary);
             });
         } catch (Exception $e) {
