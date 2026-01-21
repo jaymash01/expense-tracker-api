@@ -24,7 +24,7 @@ Ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/jaymash01/expense-tracker-api.git](https://github.com/jaymash01/expense-tracker-api.git)
+git clone https://github.com/jaymash01/expense-tracker-api.git
 cd expense-tracker-api
 ```
 
