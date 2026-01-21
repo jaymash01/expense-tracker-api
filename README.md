@@ -42,9 +42,9 @@ Copy the template to create your local environment file:
 cp .env.example .env
 ```
 
-### 4. Database Setup
+### 4. Database & OpenAI Setup
 
-Open the .env file in your editor and update the database access credentials:
+Open the .env file in your editor and update the database access credentials and your OpenAI key:
 
 ```plaintext
 DB_CONNECTION=mysql
@@ -53,6 +53,8 @@ DB_PORT=3306
 DB_DATABASE=expense_tracker
 DB_USERNAME=root
 DB_PASSWORD=your_password
+
+OPENAI_API_KEY=your_api_key
 ```
 
 ### 5. Generate Security Keys
