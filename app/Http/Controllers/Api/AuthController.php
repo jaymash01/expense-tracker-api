@@ -8,7 +8,6 @@ use App\Utils\FileUtils;
 use App\Utils\ResponseHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -53,7 +52,7 @@ class AuthController extends Controller
 
         if ($user) {
             if (!Hash::check($request->password, $user->password)) {
-                return $this->createResponse(null, 401, 'Invalid password');
+                return $this->createResponse(null, 401, 'Invalid email or password');
             }
 
             return $this->createResponse(
