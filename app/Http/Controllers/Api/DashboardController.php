@@ -50,7 +50,7 @@ class DashboardController extends Controller
 
         $data['summary']['ai_insights'] = $this->getSummaryInsights($user);
 
-        $data['lists']['expenses_by_category'] = DB::query('SELECT c.name AS name, SUM(e.amount) AS amount FROM expenses AS e INNER JOIN categories AS c ON e.expense_id = c.id WHERE e.user_id = ? AND e.expense_date >= ? GROUP BY e.category_id', [$user->id, $now->clone()->startOfMonth()])->get();
+        $data['lists']['expenses_by_category'] = DB::select('SELECT c.name AS name, SUM(e.amount) AS amount FROM expenses AS e INNER JOIN categories AS c ON e.expense_id = c.id WHERE e.user_id = ? AND e.expense_date >= ? GROUP BY e.category_id', [$user->id, $now->clone()->startOfMonth()]);
 
         $data['lists']['recent_expenses'] = Expense::with('category:id,name')
             ->where('user_id', $user->id)
